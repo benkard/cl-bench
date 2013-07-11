@@ -1,19 +1,28 @@
 ;;; auto-generated from file #p"generate.lisp"
 (IN-PACKAGE :CL-USER)
 (LOAD #p"defpackage.lisp")
-(LOAD #p"files/arrays.olisp")
-(LOAD #p"files/bignum.olisp")
-(LOAD #p"files/boehm-gc.olisp")
-(LOAD #p"files/clos.olisp")
-(LOAD #p"files/crc40.olisp")
-(LOAD #p"files/deflate.olisp")
-(LOAD #p"files/gabriel.olisp")
-(LOAD #p"files/hash.olisp")
-(LOAD #p"files/math.olisp")
-(LOAD #p"files/ratios.olisp")
-(LOAD #p"files/richards.olisp")
-(LOAD #p"files/misc.olisp")
-(LOAD #p"support.lisp")
+
+(dolist (name '(#p"files/arrays"
+                #p"files/bignum"
+                #p"files/boehm-gc"
+                #p"files/clos"
+                #p"files/crc40"
+                #p"files/deflate"
+                #p"files/gabriel"
+                #p"files/hash"
+                #p"files/math"
+                #p"files/ratios"
+                #p"files/richards"
+                #p"files/misc"))
+  (#-cl-bench-eval2
+   load
+   #+cl-bench-eval2
+   sb-eval2:load
+   (merge-pathnames (make-pathname :type "olisp") name)))
+
+
+(load #p"support.lisp")
+
 (IN-PACKAGE :CL-BENCH)
 (defun run-benchmarks ()
  (with-open-file (f (benchmark-report-file)
@@ -26,14 +35,14 @@
          (*compile-print* nil))
      (bench-report-header)
 
-#-(or gcl armedbear)
+#-(or gcl armedbear cl-bench-eval2)
 (progn
   (format t "=== running #<benchmark COMPILER for 3 runs>~%")
   (force-output)
   (bench-gc)
   (bench-report 'cl-bench.misc:run-compiler "COMPILER" 3))
 
-#-(or gcl armedbear ecl)
+#-(or gcl armedbear ecl cl-bench-eval2)
 (progn
   (format t "=== running #<benchmark LOAD-FASL for 20 runs>~%")
   (force-output)
