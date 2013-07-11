@@ -64,7 +64,7 @@
   (funcall 'cl-bench.misc::setup-walk-list/seq)
   (bench-report 'cl-bench.misc:walk-list/seq "WALK-LIST/SEQ" 2))
 
-#-(or lispworks-personal-edition armedbear poplog)
+#-(or lispworks-personal-edition armedbear poplog cl-bench-eval2)
 (progn
   (format t "=== running #<benchmark WALK-LIST/MESS for 1 runs>~%")
   (force-output)
